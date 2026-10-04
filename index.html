@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Oktafiya's Little Birthday Universe ✨🎂</title>
+  <meta name="description"
+    content="A tiny universe made specially for Oktafiya Sri Handayani's birthday — explore planets, discover wishes, and celebrate in the stars!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ===== PASSCODE / LOCK SCREEN ===== -->
+  <div id="passcode-screen">
+    <div class="passcode-stars"></div>
+    <div class="passcode-card">
+      <div class="passcode-icon">🔐✨</div>
+      <h2 class="passcode-title">Secret Gateway to Oktafiya's Universe</h2>
+      <p class="passcode-desc">Masukkan tanggal lahir spesial Oktafiya untuk membuka semesta ini:</p>
+
+      <div class="passcode-input-wrapper">
+        <input type="text" id="passcode-input" placeholder="05/10/2026" maxlength="10" autocomplete="off"
+          spellcheck="false" autofocus />
+        <button id="btn-unlock" class="btn-unlock" title="Buka Semesta">
+          <span>🔓 Masuk</span>
+        </button>
+      </div>
+
+      <div class="passcode-hint-box">
+        <span class="hint-key">💡 Petunjuk:</span> Masukkan kode: <code>05/10/2026</code>
+      </div>
+
+      <p id="passcode-error" class="passcode-error hidden">❌ Kode salah, coba masukkan 05/10/2026 yaa! ✨</p>
+    </div>
+  </div>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div id="loading-screen" class="hidden">
+    <div class="loader-content">
+      <div class="loader-planet"></div>
+      <div class="loader-ring"></div>
+      <p class="loader-text">Mempersiapkan semesta Oktafiya<span class="dots"></span></p>
+    </div>
+  </div>
+
+  <!-- ===== LANDING PAGE ===== -->
+  <div id="landing-page">
+    <div class="landing-stars"></div>
+    <div class="landing-content">
+      <div class="landing-sparkle sparkle-1">✦</div>
+      <div class="landing-sparkle sparkle-2">✧</div>
+      <div class="landing-sparkle sparkle-3">⋆</div>
+      <div class="landing-sparkle sparkle-4">✦</div>
+      <h1 class="landing-title">Welcome to Oktafiya's Universe ✨</h1>
+      <p class="landing-subtitle">A tiny universe made specially for your special day...</p>
+      <button id="btn-enter" class="btn-enter">
+        <span>ENTER THE UNIVERSE</span>
+        <span class="rocket">🚀</span>
+      </button>
+    </div>
+    <div class="landing-planets">
+      <div class="floating-planet fp-1">🪐</div>
+      <div class="floating-planet fp-2">🌎</div>
+      <div class="floating-planet fp-3">⭐</div>
+      <div class="floating-planet fp-4">🌙</div>
+    </div>
+  </div>
+
+  <!-- ===== THREE.JS CANVAS ===== -->
+  <canvas id="universe-canvas"></canvas>
+
+  <!-- ===== FULLSCREEN CONFETTI CONTAINER ===== -->
+  <div id="global-confetti" class="global-confetti"></div>
+
+  <!-- ===== UI OVERLAY ===== -->
+  <div id="ui-overlay" class="hidden">
+    <div class="ui-top-bar">
+      <button id="btn-home" class="ui-btn" title="Kembali ke Tampilan Utama">
+        <span>🏠</span>
+      </button>
+      <button id="btn-guide" class="ui-btn guide-btn" title="Panduan Menjelajah">
+        <span>📖</span>
+      </button>
+      <button id="btn-planets-list" class="ui-btn" title="Daftar Planet">
+        <span>🪐</span>
+      </button>
+      <button id="btn-birthday" class="ui-btn bday-nav-btn" title="Pesan Ulang Tahun Oktafiya">
+        <span>😏</span>
+      </button>
+      <button id="btn-surprise" class="ui-btn surprise-btn" title="Kejutan Terakhir">
+        <span>🔥</span>
+      </button>
+    </div>
+
+    <!-- Music toggle -->
+    <button id="btn-music" class="ui-btn music-btn" title="Nyalakan / Matikan Musik">
+      <span id="music-icon">🔇</span>
+    </button>
+
+    <!-- Planet visited counter -->
+    <div id="planet-counter" class="planet-counter">
+      <span id="counter-text">Planet dikunjungi: 0/9 🪐</span>
+    </div>
+  </div>
+
+  <!-- ===== QUICK PLANET SELECTOR DRAWER ===== -->
+  <div id="planet-drawer" class="glass-drawer hidden">
+    <div class="drawer-header">
+      <h3>🚀 Pilih Objek Angkasa</h3>
+      <button class="drawer-close" id="drawer-close">✕</button>
+    </div>
+    <div class="drawer-items">
+      <button class="drawer-item" data-target="Sun"><span>☀️</span> Matahari</button>
+      <button class="drawer-item" data-target="Mercury"><span>☿</span> Mercury</button>
+      <button class="drawer-item" data-target="Venus"><span>♀</span> Venus</button>
+      <button class="drawer-item" data-target="Earth"><span>🌎</span> Earth</button>
+      <button class="drawer-item" data-target="Mars"><span>♂</span> Mars</button>
+      <button class="drawer-item" data-target="Jupiter"><span>🪐</span> Jupiter</button>
+      <button class="drawer-item" data-target="Saturn"><span>🪐</span> Saturn</button>
+      <button class="drawer-item" data-target="Uranus"><span>🔵</span> Uranus</button>
+      <button class="drawer-item" data-target="Neptune"><span>🟣</span> Neptune</button>
+      <button class="drawer-item special-item" data-target="Oktafiya"><span>🌟</span> Planet OKTAFIYA</button>
+      <button class="drawer-item cake-item" data-target="Cake"><span>🎂</span> Birthday Cake</button>
+    </div>
+  </div>
+
+  <!-- ===== GUIDE MODAL (PANDUAN EKSPLORASI) ===== -->
+  <div id="guide-card" class="glass-card guide-glass hidden">
+    <button class="card-close" id="guide-card-close">✕</button>
+    <div class="guide-badge">📖 PANDUAN EKSPLORASI</div>
+    <h2 class="guide-title">Cara Menjelajahi Semesta Oktafiya ✨</h2>
+
+    <div class="guide-steps">
+      <div class="guide-step">
+        <span class="step-icon">🖱️ / 📱</span>
+        <div>
+          <h4>Putar & Zoom Kamera</h4>
+          <p><strong>Geser layar / mouse</strong> untuk memutar semesta. <strong>Scroll roda mouse / cubit
+              layar</strong> untuk zoom mendekat atau menjauh.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <span class="step-icon">🪐</span>
+        <div>
+          <h4>Klik Objek di Luar Angkasa</h4>
+          <p>Klik langsung planet apa saja (atau gunakan tombol <strong>"Pilih Planet"</strong> di atas) untuk terbang
+            mendekat dan membaca pesan rahasianya!</p>
+        </div>
+      </div>
+
+      <div class="guide-step highlight-step">
+        <span class="step-icon">🌟</span>
+        <div>
+          <h4>Planet Spesial "OKTAFIYA"</h4>
+          <p>Planet bernuansa pastel dengan cincin bintang kosmik! Klik untuk membuka surat ucapan ulang tahun spesial
+            Oktafiya.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <span class="step-icon">🎂</span>
+        <div>
+          <h4>Kue Ulang Tahun Melayang</h4>
+          <p>Ada kue tart 3D manis di luar angkasa! Klik kuenya, lalu <strong>tiup lilinnya</strong> untuk membuat
+            permohonan (*make a wish*)!</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <span class="step-icon">🐱</span>
+        <div>
+          <h4>Karakter Imut</h4>
+          <p>Ada Astronaut Cat, Alien Hijau, dan Bintang Mini yang melayang. Klik mereka untuk mendengar celotehan
+            lucunya!</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <span class="step-icon">🎁</span>
+        <div>
+          <h4>Surprise Terakhir</h4>
+          <p>Setelah menjelajah, klik tombol <strong>"Surprise"</strong> di kanan atas untuk pesta kembang api kosmik!
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <span class="step-icon">⭐</span>
+        <div>
+          <h4>Easter Eggs Rahasia!</h4>
+          <p>• Klik matahari ☀️ untuk efek ledakan cahaya.<br>• Temukan bintang kuning kecil di kejauhan dan klik
+            3x!<br>• Temukan kristal kosmik rahasia di sekitar orbit!</p>
+        </div>
+      </div>
+    </div>
+
+    <button id="btn-guide-start" class="btn-primary">Aku Mengerti, Ayo Jelajah! 🚀</button>
+  </div>
+
+  <!-- ===== PLANET INFO CARD ===== -->
+  <div id="planet-card" class="glass-card hidden">
+    <button class="card-close" id="planet-card-close">✕</button>
+    <div class="card-planet-icon" id="card-icon">🌎</div>
+    <h2 class="card-title" id="card-title">Planet Name</h2>
+    <p class="card-fact" id="card-fact">Planet fact</p>
+    <div class="card-message-box">
+      <span class="quote-mark">“</span>
+      <p class="card-message" id="card-message">Birthday message</p>
+      <span class="quote-mark">”</span>
+    </div>
+    <div class="card-actions">
+      <button class="btn-sub" id="btn-planet-back">🪐 Kembali ke Semesta</button>
+      <button class="btn-sub highlight" id="btn-planet-next">Planet Berikutnya ➔</button>
+    </div>
+  </div>
+
+  <!-- ===== BIRTHDAY MESSAGE CARD ===== -->
+  <div id="birthday-card" class="glass-card birthday-glass hidden">
+    <button class="card-close" id="birthday-card-close">✕</button>
+    <div class="bday-cake-icon">🎂</div>
+    <div class="bday-badge">SPECIAL BIRTHDAY WISH</div>
+    <h2 class="bday-title" id="bday-title"></h2>
+    <div class="bday-text-box">
+      <p class="bday-msg-1" id="bday-msg-1"></p>
+      <p class="bday-msg-2" id="bday-msg-2"></p>
+    </div>
+    <div class="bday-decorations">🎉 🌟 🎂 🚀 🎈 ✨ 🎊</div>
+    <div class="card-actions" style="margin-top: 20px;">
+      <button class="btn-sub" id="btn-bday-back">🪐 Lanjut Jelajah</button>
+      <button class="btn-sub highlight" id="btn-bday-surprise">Buka Kejutan 🎁</button>
+    </div>
+  </div>
+
+  <!-- ===== CAKE CARD ===== -->
+  <div id="cake-card" class="glass-card cake-glass hidden">
+    <button class="card-close" id="cake-card-close">✕</button>
+    <div class="cake-icon-big">🎂</div>
+    <h2 class="cake-title">Make a wish, birthday girl! ✨</h2>
+    <p class="cake-desc">Tutup mata sejenak, pikirkan harapan terindahmu di tahun ini, lalu tiup lilinnya!</p>
+    <button id="btn-blow" class="btn-blow">🌬️ Tiup Lilinnya!</button>
+    <div class="cake-wish hidden" id="cake-wish">
+      <p>⭐ <em>Harapanmu telah terbang menuju bintang-bintang! Semoga semuanya terkabul!</em> ⭐💫</p>
+    </div>
+    <div class="card-actions" style="margin-top: 15px;">
+      <button class="btn-sub" id="btn-cake-back">🪐 Kembali ke Semesta</button>
+    </div>
+  </div>
+
+  <!-- ===== SURPRISE OVERLAY ===== -->
+  <div id="surprise-overlay" class="hidden">
+    <div class="surprise-content">
+      <div class="surprise-badge">SPECIAL CELEBRATION 🎊</div>
+      <h1 class="surprise-title">HAPPY BIRTHDAY, OKTAFIYA! 🎂🌎🎉✨</h1>
+      <p class="surprise-sub-1">You are the main character of this universe.</p>
+      <p class="surprise-sub-2">Semoga selalu sehat, bahagia, sukses dalam karir dan pendidikan, serta tercapai semua
+        impianmu! 🚀💫</p>
+      <button id="btn-surprise-close" class="btn-enter">
+        <span>KEMBALI KE SEMESTA ✨</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== SPEECH BUBBLE ===== -->
+  <div id="speech-bubble" class="speech-bubble hidden">
+    <p id="speech-text"></p>
+  </div>
+
+  <!-- ===== TOAST NOTIFICATION ===== -->
+  <div id="toast" class="toast hidden">
+    <p id="toast-text"></p>
+  </div>
+
+  <!-- ===== PLANET HOVER LABEL ===== -->
+  <div id="planet-label" class="planet-label hidden">
+    <span id="label-text"></span>
+  </div>
+
+  <!-- ===== WELCOME HINT BANNER ===== -->
+  <div id="hint" class="hint hidden">
+    <span>💡 <strong>Tips:</strong> Klik planet atau tombol <strong>"📖 Panduan"</strong> di atas jika bingung!</span>
+    <button id="btn-hint-close" class="hint-close">✕</button>
+  </div>
+
+  <!-- THREE.JS IMPORTS -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
